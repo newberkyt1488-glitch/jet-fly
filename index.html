@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video Cutter Bot</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+        }
+
+        .card {
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: opacity 0.2s;
+        }
+
+        .btn:active {
+            opacity: 0.7;
+        }
+
+        .btn-primary {
+            background: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        .btn-secondary {
+            background: var(--tg-theme-hint-color, #e0e0e0);
+            color: var(--tg-theme-text-color, #000000);
+        }
+
+        .btn-danger {
+            background: #ff3b30;
+            color: white;
+        }
+
+        .option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+        }
+
+        .option:last-child {
+            border-bottom: none;
+        }
+
+        .option-label {
+            font-size: 15px;
+        }
+
+        .option-value {
+            color: var(--tg-theme-hint-color, #999999);
+            font-size: 14px;
+        }
+
+        .toggle {
+            width: 50px;
+            height: 30px;
+            background: var(--tg-theme-hint-color, #e0e0e0);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle.active {
+            background: var(--tg-theme-button-color, #3390ec);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: var(--tg-theme-bg-color, #ffffff);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--tg-theme-button-color, #3390ec);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999999);
+            margin-top: 4px;
+        }
+
+        .progress-container {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--tg-theme-hint-color, #e0e0e0);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--tg-theme-button-color, #3390ec);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 2px dashed var(--tg-theme-hint-color, #e0e0e0);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .file-label:active {
+            background: var(--tg-theme-hint-color, #f0f0f0);
+        }
+
+        .file-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 16px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tab:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .tab:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .tab.active {
+            background: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            margin-bottom: 16px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✂️ Video Cutter</h1>
+        <p>Нарезка видео для TikTok</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="upload">📤 Загрузить</button>
+        <button class="tab" data-tab="stats">📊 Статистика</button>
+        <button class="tab" data-tab="settings">⚙️ Настройки</button>
+    </div>
+
+    <!-- Вкладка загрузки -->
+    <div class="tab-content active" id="upload">
+        <div class="card">
+            <div class="card-title">📹 Загрузить видео</div>
+            
+            <label class="file-label" for="fileInput">
+                <div class="file-icon">📁</div>
+                <div>Нажмите для выбора видео</div>
+                <div style="color: var(--tg-theme-hint-color, #999); font-size: 12px; margin-top: 8px;">
+                    или перетащите файл
+                </div>
+            </label>
+            <input type="file" id="fileInput" class="file-input" accept="video/*">
+            
+            <div id="fileName" style="text-align: center; margin-bottom: 16px; font-size: 14px;"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🔗 Или ссылка на YouTube</div>
+            <input type="text" class="url-input" id="youtubeUrl" placeholder="https://youtube.com/watch?v=...">
+        </div>
+
+        <div class="card">
+            <div class="card-title">🎬 Режим нарезки</div>
+            
+            <div class="option">
+                <span class="option-label">🤖 AI-нарезка</span>
+                <div class="toggle" id="aiToggle"></div>
+            </div>
+            
+            <div style="font-size: 13px; color: var(--tg-theme-hint-color, #999); margin-top: 8px;">
+                AI найдёт лучшие моменты в видео
+            </div>
+        </div>
+
+        <button class="btn btn-primary" id="processBtn">▶️ Начать обработку</button>
+
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Обработка...</div>
+        </div>
+    </div>
+
+    <!-- Вкладка статистики -->
+    <div class="tab-content" id="stats">
+        <div class="card">
+            <div class="card-title">📊 Моя статистика</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="statVideos">0</div>
+                    <div class="stat-label">Видео</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statClips">0</div>
+                    <div class="stat-label">Части</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statMinutes">0</div>
+                    <div class="stat-label">Минут</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statAi">0</div>
+                    <div class="stat-label">AI нарезок</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-secondary" id="refreshStats">🔄 Обновить</button>
+    </div>
+
+    <!-- Вкладка настроек -->
+    <div class="tab-content" id="settings">
+        <div class="card">
+            <div class="card-title">⚙️ Настройки</div>
+            
+            <div class="option">
+                <span class="option-label">Качество видео</span>
+                <span class="option-value" id="qualityValue">1080p</span>
+            </div>
+            
+            <div class="option">
+                <span class="option-label">Длительность части</span>
+                <span class="option-value" id="durationValue">2 мин</span>
+            </div>
+            
+            <div class="option">
+                <span class="option-label">Формат</span>
+                <span class="option-value" id="formatValue">9:16 (TikTok)</span>
+            </div>
+        </div>
+
+        <button class="btn btn-danger" id="cleanBtn">🧹 Очистить файлы</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // Цвета темы
+        document.documentElement.style.setProperty('--tg-theme-bg-color', tg.backgroundColor || '#ffffff');
+        document.documentElement.style.setProperty('--tg-theme-text-color', tg.textColor || '#000000');
+        document.documentElement.style.setProperty('--tg-theme-button-color', tg.buttonColor || '#3390ec');
+        document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.buttonTextColor || '#ffffff');
+        document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', tg.secondaryBackgroundColor || '#f5f5f5');
+        document.documentElement.style.setProperty('--tg-theme-hint-color', tg.hintColor || '#999999');
+
+        // Переключение вкладок
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+                
+                if (tab.dataset.tab === 'stats') {
+                    loadStats();
+                }
+            });
+        });
+
+        // AI Toggle
+        let aiEnabled = false;
+        document.getElementById('aiToggle').addEventListener('click', function() {
+            aiEnabled = !aiEnabled;
+            this.classList.toggle('active');
+        });
+
+        // Выбор файла
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = `📄 ${file.name}`;
+            }
+        });
+
+        // Обработка
+        document.getElementById('processBtn').addEventListener('click', () => {
+            const url = document.getElementById('youtubeUrl').value;
+            const file = document.getElementById('fileInput').files[0];
+            
+            if (!url && !file) {
+                tg.showAlert('Выберите видео или вставьте ссылку на YouTube');
+                return;
+            }
+
+            // Показываем прогресс
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('processBtn').disabled = true;
+
+            // Отправляем данные боту
+            const data = {
+                action: 'process',
+                url: url,
+                ai: aiEnabled
+            };
+            
+            tg.sendData(JSON.stringify(data));
+            
+            // Анимация прогресса
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                document.getElementById('progressFill').style.width = progress + '%';
+                
+                if (progress < 30) {
+                    document.getElementById('progressText').textContent = 'Загрузка видео...';
+                } else if (progress < 70) {
+                    document.getElementById('progressText').textContent = 'Обработка...';
+                } else {
+                    document.getElementById('progressText').textContent = 'Отправка...';
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+            }, 500);
+        });
+
+        // Загрузка статистики
+        async function loadStats() {
+            // В реальном приложении здесь был бы запрос к боту
+            document.getElementById('statVideos').textContent = localStorage.getItem('statVideos') || '0';
+            document.getElementById('statClips').textContent = localStorage.getItem('statClips') || '0';
+            document.getElementById('statMinutes').textContent = localStorage.getItem('statMinutes') || '0';
+            document.getElementById('statAi').textContent = localStorage.getItem('statAi') || '0';
+        }
+
+        document.getElementById('refreshStats').addEventListener('click', loadStats);
+
+        // Очистка
+        document.getElementById('cleanBtn').addEventListener('click', () => {
+            tg.showConfirm('Удалить все временные файлы?', (confirmed) => {
+                if (confirmed) {
+                    tg.sendData(JSON.stringify({ action: 'clean' }));
+                    tg.showAlert('Файлы очищены!');
+                }
+            });
+        });
+
+        // Получение данных от бота
+        tg.onEvent('mainButtonClicked', () => {
+            console.log('Main button clicked');
+        });
+    </script>
+</body>
+</html>
