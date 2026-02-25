@@ -5,234 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>✂️ Video Cutter</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        :root {
-            --bg-primary: #0d0d0d;
-            --bg-secondary: #1a1a1a;
-            --bg-card: #1f1f1f;
-            --accent-primary: #00ff88;
-            --accent-secondary: #00d4ff;
-            --accent-gradient: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-            --text-primary: #ffffff;
-            --text-secondary: #888888;
-            --danger: #ff4757;
-            --success: #2ed573;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            color: #fff;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Background */
-        .grid-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            z-index: -2;
-        }
-
-        .glow-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.4;
-            z-index: -1;
-            animation: orbFloat 20s ease-in-out infinite;
-        }
-
-        .glow-orb-1 {
-            width: 500px;
-            height: 500px;
-            background: var(--accent-primary);
-            top: -200px;
-            right: -150px;
-        }
-
-        .glow-orb-2 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent-secondary);
-            bottom: -200px;
-            left: -150px;
-            animation-delay: -10s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(40px, -40px) scale(1.1); }
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
             padding: 20px;
             padding-bottom: 100px;
         }
 
-        /* Header */
         .header {
             text-align: center;
             padding: 30px 0;
         }
 
-        .header-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent-primary);
-            margin-bottom: 16px;
-        }
-
-        .header-badge .dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent-primary);
-            border-radius: 50%;
-            animation: blink 2s ease-in-out infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
         .header h1 {
-            font-size: 38px;
+            font-size: 36px;
             font-weight: 900;
-            background: var(--accent-gradient);
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             margin-bottom: 10px;
-            letter-spacing: -1px;
         }
 
         .header p {
+            color: #888;
             font-size: 15px;
-            color: var(--text-secondary);
         }
 
-        /* Cards */
         .card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 24px;
+            background: #1f1f1f;
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--accent-gradient);
+            border: 1px solid #333;
         }
 
         .card-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
+            color: #666;
             margin-bottom: 16px;
+            letter-spacing: 1px;
         }
 
-        /* Upload Button - FIXED */
-        .upload-btn {
+        /* КНОПКА ЗАГРУЗКИ - ИСПРАВЛЕНА */
+        .upload-button {
             width: 100%;
-            padding: 32px 24px;
-            background: rgba(0, 255, 136, 0.05);
-            border: 2px dashed rgba(0, 255, 136, 0.3);
-            border-radius: 16px;
+            height: 140px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border: 3px dashed rgba(0, 255, 136, 0.4);
+            border-radius: 14px;
             cursor: pointer;
-            text-align: center;
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-        }
-
-        .upload-btn:hover {
-            background: rgba(0, 255, 136, 0.1);
-            border-color: rgba(0, 255, 136, 0.6);
-        }
-
-        .upload-btn:active {
-            transform: scale(0.98);
-        }
-
-        .upload-btn-icon {
-            font-size: 48px;
-            filter: grayscale(0.3);
+            justify-content: center;
+            gap: 10px;
             transition: all 0.3s ease;
         }
 
-        .upload-btn:hover .upload-btn-icon {
-            filter: grayscale(0);
-            transform: scale(1.1);
+        .upload-button:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);
+            border-color: rgba(0, 255, 136, 0.7);
         }
 
-        .upload-btn-text {
+        .upload-button:active {
+            transform: scale(0.98);
+        }
+
+        .upload-button-icon {
+            font-size: 42px;
+            line-height: 1;
+        }
+
+        .upload-button-text {
             font-size: 16px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: #fff;
+            text-align: center;
         }
 
-        .upload-btn-hint {
+        .upload-button-hint {
             font-size: 13px;
-            color: var(--text-secondary);
+            color: #888;
+            text-align: center;
         }
 
         .file-input {
             display: none;
         }
 
-        /* File Info */
+        /* File info */
         .file-info {
             display: none;
             margin-top: 16px;
-            padding: 16px;
+            padding: 14px;
             background: rgba(0, 255, 136, 0.1);
             border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 14px;
+            border-radius: 12px;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .file-info.show {
@@ -240,94 +121,85 @@
         }
 
         .file-info-icon {
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .file-info-name {
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 4px;
         }
 
         .file-info-size {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: #888;
+            margin-top: 2px;
         }
 
         /* URL Input */
         .url-input {
             width: 100%;
-            padding: 16px 18px;
-            background: var(--bg-secondary);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 12px;
             font-size: 15px;
-            color: var(--text-primary);
-            font-family: inherit;
-            transition: all 0.3s ease;
+            color: #fff;
             margin-top: 16px;
         }
 
         .url-input:focus {
             outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 4px rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
         }
 
         .url-input::placeholder {
-            color: var(--text-secondary);
+            color: #666;
         }
 
         /* Settings Grid */
         .settings-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 16px;
+            gap: 10px;
+            margin-top: 14px;
         }
 
         .setting-option {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 14px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
             border: 2px solid transparent;
-        }
-
-        .setting-option:hover {
-            background: rgba(0, 255, 136, 0.05);
+            transition: all 0.3s ease;
         }
 
         .setting-option.active {
-            border-color: var(--accent-primary);
+            border-color: #00ff88;
             background: rgba(0, 255, 136, 0.1);
         }
 
         .setting-option-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
+            font-size: 22px;
+            margin-bottom: 6px;
         }
 
         .setting-option-label {
             font-size: 13px;
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
         }
 
         .setting-option-value {
             font-size: 11px;
-            color: var(--text-secondary);
+            color: #888;
         }
 
         /* AI Toggle */
         .ai-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 20px;
+            background: #1f1f1f;
+            border-radius: 16px;
+            padding: 18px;
             margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
         }
 
         .ai-header {
@@ -346,42 +218,40 @@
         }
 
         .ai-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            background: var(--accent-gradient);
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
         }
 
         .toggle {
-            width: 54px;
-            height: 30px;
-            background: var(--bg-secondary);
+            width: 52px;
+            height: 28px;
+            background: #1a1a1a;
             border-radius: 100px;
             position: relative;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
         }
 
         .toggle.active {
-            background: var(--accent-gradient);
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
             border-color: transparent;
         }
 
         .toggle-knob {
             position: absolute;
-            top: 3px;
-            left: 3px;
+            top: 2px;
+            left: 2px;
             width: 22px;
             height: 22px;
             background: white;
             border-radius: 50%;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
 
         .toggle.active .toggle-knob {
@@ -390,38 +260,31 @@
 
         .ai-description {
             font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
+            color: #888;
+            line-height: 1.4;
         }
 
         /* Action Button */
         .action-btn {
             width: 100%;
-            padding: 20px;
-            background: var(--accent-gradient);
+            padding: 18px;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
             border: none;
-            border-radius: 16px;
+            border-radius: 14px;
             font-size: 17px;
             font-weight: 700;
             color: #000;
             cursor: pointer;
-            transition: all 0.3s ease;
             box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
         }
 
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(0, 255, 136, 0.4);
-        }
-
         .action-btn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         .action-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
 
         .action-btn-content {
@@ -439,33 +302,27 @@
 
         .progress-section.show {
             display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .progress-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #1f1f1f;
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid #333;
         }
 
         .progress-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .progress-spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--accent-primary);
+            width: 18px;
+            height: 18px;
+            border: 3px solid #333;
+            border-top-color: #00ff88;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -483,12 +340,12 @@
         .progress-percent {
             font-size: 14px;
             font-weight: 700;
-            color: var(--accent-primary);
+            color: #00ff88;
         }
 
         .progress-bar-bg {
             height: 6px;
-            background: var(--bg-secondary);
+            background: #1a1a1a;
             border-radius: 100px;
             overflow: hidden;
             margin-bottom: 12px;
@@ -496,7 +353,7 @@
 
         .progress-bar-fill {
             height: 100%;
-            background: var(--accent-gradient);
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
             border-radius: 100px;
             width: 0%;
             transition: width 0.4s ease;
@@ -513,13 +370,9 @@
             align-items: center;
             gap: 6px;
             opacity: 0.3;
-            transition: all 0.3s ease;
         }
 
-        .progress-step.active {
-            opacity: 1;
-        }
-
+        .progress-step.active,
         .progress-step.completed {
             opacity: 1;
         }
@@ -528,60 +381,53 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--text-secondary);
-            transition: all 0.3s ease;
+            background: #666;
         }
 
-        .progress-step.active .step-dot {
-            background: var(--accent-primary);
-            box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
-        }
-
+        .progress-step.active .step-dot,
         .progress-step.completed .step-dot {
-            background: var(--accent-primary);
+            background: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
         }
 
         .step-label {
             font-size: 10px;
-            color: var(--text-secondary);
-            text-align: center;
+            color: #888;
         }
 
         /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
 
         .stat-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
+            background: #1f1f1f;
+            border-radius: 14px;
+            padding: 18px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
         }
 
         .stat-icon {
-            font-size: 26px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 8px;
         }
 
         .stat-value {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 900;
-            background: var(--accent-gradient);
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             line-height: 1;
             margin-bottom: 6px;
         }
 
         .stat-label {
             font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 500;
+            color: #888;
         }
 
         /* Tabs */
@@ -590,10 +436,9 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--bg-secondary);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: #1a1a1a;
+            border-top: 1px solid #333;
             padding: 10px 20px;
-            padding-bottom: max(10px, env(safe-area-inset-bottom));
             z-index: 100;
         }
 
@@ -609,10 +454,9 @@
             padding: 12px;
             background: transparent;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 18px;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -622,7 +466,7 @@
         .tab-btn span {
             font-size: 10px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: #888;
         }
 
         .tab-btn.active {
@@ -630,33 +474,31 @@
         }
 
         .tab-btn.active span {
-            color: var(--accent-primary);
+            color: #00ff88;
         }
 
-        /* Tab Panels */
         .tab-panel {
             display: none;
         }
 
         .tab-panel.active {
             display: block;
-            animation: fadeIn 0.3s ease;
         }
 
         /* Settings List */
         .settings-list {
-            background: var(--bg-card);
-            border-radius: 16px;
+            background: #1f1f1f;
+            border-radius: 14px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
         }
 
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px 18px;
+            border-bottom: 1px solid #333;
         }
 
         .setting-item:last-child {
@@ -666,13 +508,13 @@
         .setting-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
         .setting-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -684,266 +526,231 @@
         .setting-icon.green { background: linear-gradient(135deg, #22c55e, #00ff88); }
         .setting-icon.red { background: linear-gradient(135deg, #ef4444, #f97316); }
 
+        .setting-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
         .setting-name {
             font-size: 15px;
             font-weight: 600;
-            margin-bottom: 3px;
         }
 
         .setting-desc {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: #888;
         }
 
         .setting-value {
             font-size: 14px;
             font-weight: 600;
-            color: var(--accent-primary);
+            color: #00ff88;
         }
 
-        /* Delete Button */
         .delete-btn {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             background: rgba(255, 71, 87, 0.1);
             border: 2px solid rgba(255, 71, 87, 0.3);
-            border-radius: 14px;
+            border-radius: 12px;
             font-size: 15px;
             font-weight: 600;
-            color: var(--danger);
+            color: #ff4757;
             cursor: pointer;
-            transition: all 0.3s ease;
             margin-top: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
-
-        .delete-btn:hover {
-            background: rgba(255, 71, 87, 0.2);
-            border-color: var(--danger);
-        }
-
-        /* Responsive */
-        @media (max-width: 400px) {
-            .header h1 { font-size: 32px; }
-            .stat-value { font-size: 28px; }
-            .container { padding: 16px; }
-        }
     </style>
 </head>
 <body>
-    <div class="grid-bg"></div>
-    <div class="glow-orb glow-orb-1"></div>
-    <div class="glow-orb glow-orb-2"></div>
+    <div class="header">
+        <h1>Video Cutter</h1>
+        <p>Нарезка видео для TikTok с AI</p>
+    </div>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-badge">
-                <span class="dot"></span>
-                <span>AI POWERED</span>
+    <!-- Upload Tab -->
+    <div class="tab-panel active" id="tab-upload">
+        <div class="card">
+            <div class="card-title">📁 ВЫБЕРИТЕ ВИДЕО</div>
+            
+            <label class="upload-button" for="fileInput">
+                <div class="upload-button-icon">📤</div>
+                <div class="upload-button-text">Нажмите для загрузки видео</div>
+                <div class="upload-button-hint">MP4, MOV, AVI до 300 МБ</div>
+            </label>
+            <input type="file" id="fileInput" class="file-input" accept="video/*">
+            
+            <div class="file-info" id="fileInfo">
+                <div class="file-info-icon">📄</div>
+                <div>
+                    <div class="file-info-name" id="fileName">video.mp4</div>
+                    <div class="file-info-size" id="fileSize">24.5 МБ</div>
+                </div>
             </div>
-            <h1>Video Cutter</h1>
-            <p>Нарезка видео для TikTok с AI</p>
+
+            <input type="text" class="url-input" id="youtubeUrl" placeholder="🔗 YouTube ссылка...">
         </div>
 
-        <!-- Upload Tab -->
-        <div class="tab-panel active" id="tab-upload">
-            <!-- Upload Card -->
-            <div class="card">
-                <div class="card-title">📁 ВЫБЕРИТЕ ВИДЕО</div>
-                
-                <label class="upload-btn" for="fileInput">
-                    <div class="upload-btn-icon">📤</div>
-                    <div class="upload-btn-text">Нажмите для загрузки</div>
-                    <div class="upload-btn-hint">MP4, MOV, AVI до 300 МБ</div>
-                </label>
-                <input type="file" id="fileInput" class="file-input" accept="video/*">
-                
-                <div class="file-info" id="fileInfo">
-                    <div class="file-info-icon">📄</div>
-                    <div>
-                        <div class="file-info-name" id="fileName">video.mp4</div>
-                        <div class="file-info-size" id="fileSize">24.5 МБ</div>
-                    </div>
+        <div class="card">
+            <div class="card-title">⚙️ НАСТРОЙКИ</div>
+            
+            <div class="settings-grid">
+                <div class="setting-option active" data-setting="quality" data-value="1080p">
+                    <div class="setting-option-icon">📐</div>
+                    <div class="setting-option-label">1080p</div>
+                    <div class="setting-option-value">Full HD</div>
                 </div>
-
-                <input type="text" class="url-input" id="youtubeUrl" placeholder="🔗 YouTube ссылка...">
-            </div>
-
-            <!-- Settings Card -->
-            <div class="card">
-                <div class="card-title">⚙️ НАСТРОЙКИ НАРЕЗКИ</div>
-                
-                <div class="settings-grid">
-                    <div class="setting-option active" data-setting="quality" data-value="1080p">
-                        <div class="setting-option-icon">📐</div>
-                        <div class="setting-option-label">1080p</div>
-                        <div class="setting-option-value">Full HD</div>
-                    </div>
-                    <div class="setting-option" data-setting="quality" data-value="720p">
-                        <div class="setting-option-icon">📐</div>
-                        <div class="setting-option-label">720p</div>
-                        <div class="setting-option-value">HD</div>
-                    </div>
-                    <div class="setting-option active" data-setting="duration" data-value="120">
-                        <div class="setting-option-icon">⏱️</div>
-                        <div class="setting-option-label">2 мин</div>
-                        <div class="setting-option-value">120 сек</div>
-                    </div>
-                    <div class="setting-option" data-setting="duration" data-value="60">
-                        <div class="setting-option-icon">⏱️</div>
-                        <div class="setting-option-label">1 мин</div>
-                        <div class="setting-option-value">60 сек</div>
-                    </div>
-                    <div class="setting-option active" data-setting="format" data-value="9:16">
-                        <div class="setting-option-icon">📱</div>
-                        <div class="setting-option-label">9:16</div>
-                        <div class="setting-option-value">TikTok</div>
-                    </div>
-                    <div class="setting-option" data-setting="format" data-value="1:1">
-                        <div class="setting-option-icon">📱</div>
-                        <div class="setting-option-label">1:1</div>
-                        <div class="setting-option-value">Post</div>
-                    </div>
+                <div class="setting-option" data-setting="quality" data-value="720p">
+                    <div class="setting-option-icon">📐</div>
+                    <div class="setting-option-label">720p</div>
+                    <div class="setting-option-value">HD</div>
                 </div>
-            </div>
-
-            <!-- AI Card -->
-            <div class="ai-card">
-                <div class="ai-header">
-                    <div class="ai-title">
-                        <div class="ai-icon">🤖</div>
-                        AI-нарезка
-                    </div>
-                    <div class="toggle" id="aiToggle">
-                        <div class="toggle-knob"></div>
-                    </div>
+                <div class="setting-option active" data-setting="duration" data-value="120">
+                    <div class="setting-option-icon">⏱️</div>
+                    <div class="setting-option-label">2 мин</div>
+                    <div class="setting-option-value">120 сек</div>
                 </div>
-                <div class="ai-description">
-                    AI автоматически найдёт самые интересные моменты в видео
+                <div class="setting-option" data-setting="duration" data-value="60">
+                    <div class="setting-option-icon">⏱️</div>
+                    <div class="setting-option-label">1 мин</div>
+                    <div class="setting-option-value">60 сек</div>
                 </div>
-            </div>
-
-            <!-- Action Button -->
-            <button class="action-btn" id="processBtn">
-                <div class="action-btn-content">
-                    <span>▶️</span>
-                    <span>Начать обработку</span>
+                <div class="setting-option active" data-setting="format" data-value="9:16">
+                    <div class="setting-option-icon">📱</div>
+                    <div class="setting-option-label">9:16</div>
+                    <div class="setting-option-value">TikTok</div>
                 </div>
-            </button>
-
-            <!-- Progress -->
-            <div class="progress-section" id="progressSection">
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <div class="progress-spinner"></div>
-                        <div class="progress-title">Обработка видео</div>
-                        <div class="progress-percent" id="progressPercent">0%</div>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progressBar"></div>
-                    </div>
-                    <div class="progress-steps">
-                        <div class="progress-step active" data-step="1">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Загрузка</div>
-                        </div>
-                        <div class="progress-step" data-step="2">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Анализ</div>
-                        </div>
-                        <div class="progress-step" data-step="3">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Нарезка</div>
-                        </div>
-                        <div class="progress-step" data-step="4">
-                            <div class="step-dot"></div>
-                            <div class="step-label">Готово</div>
-                        </div>
-                    </div>
+                <div class="setting-option" data-setting="format" data-value="1:1">
+                    <div class="setting-option-icon">📱</div>
+                    <div class="setting-option-label">1:1</div>
+                    <div class="setting-option-value">Post</div>
                 </div>
             </div>
         </div>
 
-        <!-- Stats Tab -->
-        <div class="tab-panel" id="tab-stats">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">🎬</div>
-                    <div class="stat-value" id="statVideos">0</div>
-                    <div class="stat-label">Видео</div>
+        <div class="ai-card">
+            <div class="ai-header">
+                <div class="ai-title">
+                    <div class="ai-icon">🤖</div>
+                    AI-нарезка
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">✂️</div>
-                    <div class="stat-value" id="statClips">0</div>
-                    <div class="stat-label">Части</div>
+                <div class="toggle" id="aiToggle">
+                    <div class="toggle-knob"></div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⏱️</div>
-                    <div class="stat-value" id="statMinutes">0</div>
-                    <div class="stat-label">Минут</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🤖</div>
-                    <div class="stat-value" id="statAi">0</div>
-                    <div class="stat-label">AI нарезок</div>
-                </div>
+            </div>
+            <div class="ai-description">
+                AI автоматически найдёт лучшие моменты
             </div>
         </div>
 
-        <!-- Settings Tab -->
-        <div class="tab-panel" id="tab-settings">
-            <div class="settings-list">
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <div class="setting-icon purple">📐</div>
-                        <div>
-                            <div class="setting-name">Разрешение</div>
-                            <div class="setting-desc">Качество видео</div>
-                        </div>
-                    </div>
-                    <div class="setting-value" id="settingQuality">1080p</div>
+        <button class="action-btn" id="processBtn">
+            <div class="action-btn-content">
+                <span>▶️</span>
+                <span>Начать обработку</span>
+            </div>
+        </button>
+
+        <div class="progress-section" id="progressSection">
+            <div class="progress-card">
+                <div class="progress-header">
+                    <div class="progress-spinner"></div>
+                    <div class="progress-title">Обработка видео</div>
+                    <div class="progress-percent" id="progressPercent">0%</div>
                 </div>
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <div class="setting-icon blue">⏱️</div>
-                        <div>
-                            <div class="setting-name">Длительность</div>
-                            <div class="setting-desc">Длина части</div>
-                        </div>
-                    </div>
-                    <div class="setting-value" id="settingDuration">2 мин</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
                 </div>
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <div class="setting-icon green">📱</div>
-                        <div>
-                            <div class="setting-name">Формат</div>
-                            <div class="setting-desc">Соотношение</div>
-                        </div>
+                <div class="progress-steps">
+                    <div class="progress-step active" data-step="1">
+                        <div class="step-dot"></div>
+                        <div class="step-label">Загрузка</div>
                     </div>
-                    <div class="setting-value" id="settingFormat">9:16</div>
-                </div>
-                <div class="setting-item">
-                    <div class="setting-left">
-                        <div class="setting-icon red">🔊</div>
-                        <div>
-                            <div class="setting-name">Аудио</div>
-                            <div class="setting-desc">Кодек</div>
-                        </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-dot"></div>
+                        <div class="step-label">Анализ</div>
                     </div>
-                    <div class="setting-value">AAC</div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-dot"></div>
+                        <div class="step-label">Нарезка</div>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <div class="step-dot"></div>
+                        <div class="step-label">Готово</div>
+                    </div>
                 </div>
             </div>
-
-            <button class="delete-btn" id="cleanBtn">
-                <span>🗑️</span>
-                <span>Очистить файлы</span>
-            </button>
         </div>
+    </div>
+
+    <!-- Stats Tab -->
+    <div class="tab-panel" id="tab-stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🎬</div>
+                <div class="stat-value" id="statVideos">0</div>
+                <div class="stat-label">Видео</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✂️</div>
+                <div class="stat-value" id="statClips">0</div>
+                <div class="stat-label">Части</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="statMinutes">0</div>
+                <div class="stat-label">Минут</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🤖</div>
+                <div class="stat-value" id="statAi">0</div>
+                <div class="stat-label">AI нарезок</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div class="tab-panel" id="tab-settings">
+        <div class="settings-list">
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="setting-icon purple">📐</div>
+                    <div class="setting-info">
+                        <div class="setting-name">Разрешение</div>
+                        <div class="setting-desc">Качество видео</div>
+                    </div>
+                </div>
+                <div class="setting-value" id="settingQuality">1080p</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="setting-icon blue">⏱️</div>
+                    <div class="setting-info">
+                        <div class="setting-name">Длительность</div>
+                        <div class="setting-desc">Длина части</div>
+                    </div>
+                </div>
+                <div class="setting-value" id="settingDuration">2 мин</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="setting-icon green">📱</div>
+                    <div class="setting-info">
+                        <div class="setting-name">Формат</div>
+                        <div class="setting-desc">Соотношение</div>
+                    </div>
+                </div>
+                <div class="setting-value" id="settingFormat">9:16</div>
+            </div>
+        </div>
+
+        <button class="delete-btn" id="cleanBtn">
+            <span>🗑️</span>
+            <span>Очистить файлы</span>
+        </button>
     </div>
 
     <!-- Bottom Tabs -->
@@ -967,9 +774,7 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
 
-        // Current settings
         let currentSettings = {
             quality: '1080p',
             duration: '120',
@@ -977,56 +782,43 @@
             ai: false
         };
 
-        // Tab switching
+        // Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-                
                 btn.classList.add('active');
                 document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-                
                 if (btn.dataset.tab === 'stats') loadStats();
-                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
             });
         });
 
-        // Settings options
+        // Settings
         document.querySelectorAll('.setting-option').forEach(option => {
             option.addEventListener('click', () => {
                 const setting = option.dataset.setting;
                 const value = option.dataset.value;
-                
-                // Update current settings
                 currentSettings[setting] = value;
                 
-                // Update UI
                 document.querySelectorAll(`[data-setting="${setting}"]`).forEach(opt => {
                     opt.classList.remove('active');
                 });
                 option.classList.add('active');
                 
-                // Update settings tab
                 const displayValues = {
                     quality: value,
                     duration: value === '120' ? '2 мин' : '1 мин',
                     format: value
                 };
-                const settingDisplay = document.getElementById('setting' + setting.charAt(0).toUpperCase() + setting.slice(1));
-                if (settingDisplay) {
-                    settingDisplay.textContent = displayValues[setting] || value;
-                }
-                
-                if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+                const displayEl = document.getElementById('setting' + setting.charAt(0).toUpperCase() + setting.slice(1));
+                if (displayEl) displayEl.textContent = displayValues[setting] || value;
             });
         });
 
         // AI Toggle
-        const aiToggle = document.getElementById('aiToggle');
-        aiToggle.addEventListener('click', function() {
+        document.getElementById('aiToggle').addEventListener('click', function() {
             currentSettings.ai = !currentSettings.ai;
             this.classList.toggle('active');
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         });
 
         // File upload
@@ -1041,11 +833,10 @@
                 fileName.textContent = file.name;
                 fileSize.textContent = (file.size / 1024 / 1024).toFixed(1) + ' МБ';
                 fileInfo.classList.add('show');
-                if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
             }
         });
 
-        // Process button
+        // Process
         const processBtn = document.getElementById('processBtn');
         const progressSection = document.getElementById('progressSection');
         const progressBar = document.getElementById('progressBar');
@@ -1056,17 +847,13 @@
             const file = fileInput.files[0];
             
             if (!url && !file) {
-                tg.showAlert('Выберите видео или вставьте ссылку на YouTube');
+                tg.showAlert('Выберите видео или ссылку на YouTube');
                 return;
             }
 
-            if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-
             progressSection.classList.add('show');
             processBtn.disabled = true;
-            processBtn.innerHTML = '<div class="action-btn-content"><span>⏳</span><span>Обработка...</span></div>';
 
-            // Send to bot with settings
             tg.sendData(JSON.stringify({
                 action: 'process',
                 url: url,
@@ -1076,77 +863,42 @@
                 format: currentSettings.format
             }));
 
-            // Animate progress
-            const stages = [
-                { percent: 25, step: 1 },
-                { percent: 50, step: 2 },
-                { percent: 75, step: 3 },
-                { percent: 100, step: 4 }
-            ];
-
-            let currentStage = 0;
+            let stage = 0;
+            const stages = [25, 50, 75, 100];
             const interval = setInterval(() => {
-                if (currentStage < stages.length) {
-                    const stage = stages[currentStage];
-                    progressBar.style.width = stage.percent + '%';
-                    progressPercent.textContent = stage.percent + '%';
+                if (stage < stages.length) {
+                    progressBar.style.width = stages[stage] + '%';
+                    progressPercent.textContent = stages[stage] + '%';
                     
                     document.querySelectorAll('.progress-step').forEach((step, i) => {
-                        if (i < stage.step) {
+                        if (i <= stage) {
                             step.classList.add('completed');
                             step.classList.remove('active');
-                        } else if (i === stage.step - 1) {
-                            step.classList.add('active');
                         }
                     });
-                    
-                    currentStage++;
+                    stage++;
                 }
-            }, 800);
+            }, 1000);
         });
 
-        // Load stats
+        // Stats
         function loadStats() {
-            const stats = {
-                videos: localStorage.getItem('statVideos') || '12',
-                clips: localStorage.getItem('statClips') || '36',
-                minutes: localStorage.getItem('statMinutes') || '48',
-                ai: localStorage.getItem('statAi') || '8'
-            };
-
-            ['statVideos', 'statClips', 'statMinutes', 'statAi'].forEach(id => {
-                const el = document.getElementById(id);
-                const target = parseInt(stats[id.replace('stat', '').toLowerCase()]) || 0;
-                animateNumber(el, target);
-            });
+            document.getElementById('statVideos').textContent = localStorage.getItem('statVideos') || '0';
+            document.getElementById('statClips').textContent = localStorage.getItem('statClips') || '0';
+            document.getElementById('statMinutes').textContent = localStorage.getItem('statMinutes') || '0';
+            document.getElementById('statAi').textContent = localStorage.getItem('statAi') || '0';
         }
 
-        function animateNumber(el, target) {
-            let current = 0;
-            const increment = target / 20;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    el.textContent = target;
-                    clearInterval(timer);
-                } else {
-                    el.textContent = Math.floor(current);
-                }
-            }, 50);
-        }
-
-        // Clean button
+        // Clean
         document.getElementById('cleanBtn').addEventListener('click', () => {
-            tg.showConfirm('Удалить все временные файлы?', (confirmed) => {
-                if (confirmed) {
-                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            tg.showConfirm('Удалить все файлы?', (ok) => {
+                if (ok) {
                     tg.sendData(JSON.stringify({ action: 'clean' }));
-                    tg.showAlert('✅ Файлы очищены!');
+                    tg.showAlert('✅ Очищено!');
                 }
             });
         });
 
-        // Initialize
         loadStats();
     </script>
 </body>
