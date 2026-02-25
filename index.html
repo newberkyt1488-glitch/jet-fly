@@ -3,135 +3,509 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Video Cutter Bot</title>
+    <title>✂️ Video Cutter Bot</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #3390ec;
+            --primary-dark: #2775c9;
+            --success: #34c759;
+            --warning: #ff9500;
+            --danger: #ff3b30;
+            --purple: #af52de;
+            --pink: #ff2d55;
+            --blue: #007aff;
+            --teal: #5ac8fa;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 16px;
-            padding-bottom: 80px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1a1a2e;
+            overflow-x: hidden;
         }
 
+        /* Анимированный фон */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite;
+        }
+
+        .shape:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 60px; height: 60px; left: 70%; animation-delay: 2s; }
+        .shape:nth-child(3) { width: 100px; height: 100px; left: 40%; animation-delay: 4s; }
+        .shape:nth-child(4) { width: 40px; height: 40px; left: 80%; animation-delay: 1s; }
+        .shape:nth-child(5) { width: 70px; height: 70px; left: 20%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            padding: 20px;
+            padding-bottom: 100px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Header */
         .header {
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+            padding: 30px 20px;
             margin-bottom: 20px;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
             margin-bottom: 8px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .header p {
-            color: var(--tg-theme-hint-color, #999999);
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            font-weight: 400;
         }
 
+        /* Cards */
         .card {
-            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-            border-radius: 12px;
-            padding: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
             margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.6s ease backwards;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title .icon {
+            font-size: 22px;
+        }
+
+        /* File Upload */
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            border: 3px dashed rgba(102, 126, 234, 0.3);
+            border-radius: 16px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        }
+
+        .file-label:hover {
+            border-color: rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transform: scale(1.02);
+        }
+
+        .file-label:active {
+            transform: scale(0.98);
+        }
+
+        .file-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .file-label-text {
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 12px;
+            color: #4a4a68;
+            margin-bottom: 8px;
         }
 
-        .btn {
-            width: 100%;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-bottom: 12px;
-            transition: opacity 0.2s;
+        .file-label-hint {
+            font-size: 13px;
+            color: #888;
         }
 
-        .btn:active {
-            opacity: 0.7;
-        }
-
-        .btn-primary {
-            background: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #ffffff);
-        }
-
-        .btn-secondary {
-            background: var(--tg-theme-hint-color, #e0e0e0);
-            color: var(--tg-theme-text-color, #000000);
-        }
-
-        .btn-danger {
-            background: #ff3b30;
+        #fileName {
+            text-align: center;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 16px;
+            animation: fadeIn 0.3s ease;
         }
 
-        .option {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* URL Input */
+        .url-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 14px;
+            font-size: 16px;
+            font-family: inherit;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .url-input::placeholder {
+            color: #aaa;
+        }
+
+        /* Toggle */
+        .toggle-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .option:last-child {
+        .toggle-container:last-child {
             border-bottom: none;
         }
 
-        .option-label {
-            font-size: 15px;
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 500;
         }
 
-        .option-value {
-            color: var(--tg-theme-hint-color, #999999);
-            font-size: 14px;
+        .toggle-label .emoji {
+            font-size: 20px;
         }
 
         .toggle {
-            width: 50px;
-            height: 30px;
-            background: var(--tg-theme-hint-color, #e0e0e0);
-            border-radius: 15px;
+            width: 56px;
+            height: 32px;
+            background: #e0e0e0;
+            border-radius: 16px;
             position: relative;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .toggle.active {
-            background: var(--tg-theme-button-color, #3390ec);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .toggle::after {
             content: '';
             position: absolute;
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             background: white;
             border-radius: 50%;
             top: 2px;
             left: 2px;
-            transition: transform 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .toggle.active::after {
-            transform: translateX(20px);
+            transform: translateX(24px);
         }
 
+        .toggle-hint {
+            font-size: 13px;
+            color: #888;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4a4a68;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Progress */
+        .progress-container {
+            display: none;
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 16px;
+            margin-top: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .progress-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            font-size: 15px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .progress-status {
+            font-size: 13px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 6px;
+            border-radius: 14px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 16px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -140,234 +514,275 @@
 
         .stat-item {
             text-align: center;
-            padding: 12px;
-            background: var(--tg-theme-bg-color, #ffffff);
-            border-radius: 8px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
         }
 
         .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--tg-theme-button-color, #3390ec);
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .stat-label {
-            font-size: 12px;
-            color: var(--tg-theme-hint-color, #999999);
-            margin-top: 4px;
-        }
-
-        .progress-container {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--tg-theme-hint-color, #e0e0e0);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--tg-theme-button-color, #3390ec);
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        .progress-text {
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #999999);
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .file-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            border: 2px dashed var(--tg-theme-hint-color, #e0e0e0);
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .file-label:active {
-            background: var(--tg-theme-hint-color, #f0f0f0);
-        }
-
-        .file-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 16px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
+            color: #888;
+            margin-top: 6px;
             font-weight: 500;
         }
 
-        .tab:first-child {
-            border-radius: 10px 0 0 10px;
+        /* Settings Options */
+        .setting-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .tab:last-child {
-            border-radius: 0 10px 10px 0;
+        .setting-option:last-child {
+            border-bottom: none;
         }
 
-        .tab.active {
-            background: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #ffffff);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .url-input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--tg-theme-hint-color, #e0e0e0);
-            border-radius: 10px;
+        .setting-label {
             font-size: 16px;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            margin-bottom: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .hidden {
-            display: none;
+        .setting-value {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Success Animation */
+        .success-checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            animation: scaleUp 0.5s ease;
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .checkmark-circle {
+            fill: none;
+            stroke: #34c759;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .checkmark {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.5s 0.3s forwards;
+        }
+
+        @keyframes drawCheck {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .empty-state .emoji {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .header h1 { font-size: 24px; }
+            .logo { width: 70px; height: 70px; font-size: 36px; }
+            .stat-value { font-size: 28px; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>✂️ Video Cutter</h1>
-        <p>Нарезка видео для TikTok</p>
+    <!-- Анимированный фон -->
+    <div class="bg-animation"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
 
-    <div class="tabs">
-        <button class="tab active" data-tab="upload">📤 Загрузить</button>
-        <button class="tab" data-tab="stats">📊 Статистика</button>
-        <button class="tab" data-tab="settings">⚙️ Настройки</button>
-    </div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">✂️</div>
+            <h1>Video Cutter</h1>
+            <p>Нарезка видео для TikTok с AI</p>
+        </div>
 
-    <!-- Вкладка загрузки -->
-    <div class="tab-content active" id="upload">
-        <div class="card">
-            <div class="card-title">📹 Загрузить видео</div>
-            
-            <label class="file-label" for="fileInput">
-                <div class="file-icon">📁</div>
-                <div>Нажмите для выбора видео</div>
-                <div style="color: var(--tg-theme-hint-color, #999); font-size: 12px; margin-top: 8px;">
-                    или перетащите файл
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="upload">📤 Загрузить</button>
+            <button class="tab" data-tab="stats">📊 Статистика</button>
+            <button class="tab" data-tab="settings">⚙️ Настройки</button>
+        </div>
+
+        <!-- Вкладка загрузки -->
+        <div class="tab-content active" id="upload">
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🎬</span>
+                    Загрузить видео
                 </div>
-            </label>
-            <input type="file" id="fileInput" class="file-input" accept="video/*">
-            
-            <div id="fileName" style="text-align: center; margin-bottom: 16px; font-size: 14px;"></div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">🔗 Или ссылка на YouTube</div>
-            <input type="text" class="url-input" id="youtubeUrl" placeholder="https://youtube.com/watch?v=...">
-        </div>
-
-        <div class="card">
-            <div class="card-title">🎬 Режим нарезки</div>
-            
-            <div class="option">
-                <span class="option-label">🤖 AI-нарезка</span>
-                <div class="toggle" id="aiToggle"></div>
+                
+                <label class="file-label" for="fileInput">
+                    <div class="file-icon">📁</div>
+                    <div class="file-label-text">Нажмите для выбора видео</div>
+                    <div class="file-label-hint">MP4, MOV, AVI до 300 МБ</div>
+                </label>
+                <input type="file" id="fileInput" class="file-input" accept="video/*">
+                
+                <div id="fileName" style="display: none;"></div>
             </div>
-            
-            <div style="font-size: 13px; color: var(--tg-theme-hint-color, #999); margin-top: 8px;">
-                AI найдёт лучшие моменты в видео
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🔗</span>
+                    Или ссылка на YouTube
+                </div>
+                <input type="text" class="url-input" id="youtubeUrl" placeholder="https://youtube.com/watch?v=...">
             </div>
-        </div>
 
-        <button class="btn btn-primary" id="processBtn">▶️ Начать обработку</button>
-
-        <div class="progress-container" id="progressContainer">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="progress-text" id="progressText">Обработка...</div>
-        </div>
-    </div>
-
-    <!-- Вкладка статистики -->
-    <div class="tab-content" id="stats">
-        <div class="card">
-            <div class="card-title">📊 Моя статистика</div>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-value" id="statVideos">0</div>
-                    <div class="stat-label">Видео</div>
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🎯</span>
+                    Режим нарезки
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statClips">0</div>
-                    <div class="stat-label">Части</div>
+                
+                <div class="toggle-container">
+                    <div class="toggle-label">
+                        <span class="emoji">🤖</span>
+                        AI-нарезка
+                    </div>
+                    <div class="toggle" id="aiToggle"></div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statMinutes">0</div>
-                    <div class="stat-label">Минут</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statAi">0</div>
-                    <div class="stat-label">AI нарезок</div>
+                
+                <div class="toggle-hint">
+                    AI автоматически найдёт самые интересные моменты в видео
                 </div>
             </div>
-        </div>
 
-        <button class="btn btn-secondary" id="refreshStats">🔄 Обновить</button>
-    </div>
+            <button class="btn btn-primary" id="processBtn">
+                <span>▶️</span>
+                Начать обработку
+            </button>
 
-    <!-- Вкладка настроек -->
-    <div class="tab-content" id="settings">
-        <div class="card">
-            <div class="card-title">⚙️ Настройки</div>
-            
-            <div class="option">
-                <span class="option-label">Качество видео</span>
-                <span class="option-value" id="qualityValue">1080p</span>
-            </div>
-            
-            <div class="option">
-                <span class="option-label">Длительность части</span>
-                <span class="option-value" id="durationValue">2 мин</span>
-            </div>
-            
-            <div class="option">
-                <span class="option-label">Формат</span>
-                <span class="option-value" id="formatValue">9:16 (TikTok)</span>
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-icon">⚙️</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Обработка...</div>
+                <div class="progress-status" id="progressStatus">Загрузка видео</div>
             </div>
         </div>
 
-        <button class="btn btn-danger" id="cleanBtn">🧹 Очистить файлы</button>
+        <!-- Вкладка статистики -->
+        <div class="tab-content" id="stats">
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📊</span>
+                    Моя статистика
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="statVideos">0</div>
+                        <div class="stat-label">Видео</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statClips">0</div>
+                        <div class="stat-label">Части</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statMinutes">0</div>
+                        <div class="stat-label">Минут</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statAi">0</div>
+                        <div class="stat-label">AI нарезок</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" id="refreshStats">
+                <span>🔄</span>
+                Обновить
+            </button>
+        </div>
+
+        <!-- Вкладка настроек -->
+        <div class="tab-content" id="settings">
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🎨</span>
+                    Качество видео
+                </div>
+                
+                <div class="setting-option">
+                    <div class="setting-label">
+                        <span>📐</span>
+                        Разрешение
+                    </div>
+                    <div class="setting-value">1080p</div>
+                </div>
+                
+                <div class="setting-option">
+                    <div class="setting-label">
+                        <span>⏱️</span>
+                        Длительность части
+                    </div>
+                    <div class="setting-value">2 мин</div>
+                </div>
+                
+                <div class="setting-option">
+                    <div class="setting-label">
+                        <span>📱</span>
+                        Формат
+                    </div>
+                    <div class="setting-value">9:16 (TikTok)</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🧹</span>
+                    Управление
+                </div>
+                
+                <button class="btn btn-danger" id="cleanBtn" style="margin-top: 12px;">
+                    <span>🗑️</span>
+                    Очистить файлы
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -375,13 +790,18 @@
         tg.ready();
         tg.expand();
 
-        // Цвета темы
-        document.documentElement.style.setProperty('--tg-theme-bg-color', tg.backgroundColor || '#ffffff');
-        document.documentElement.style.setProperty('--tg-theme-text-color', tg.textColor || '#000000');
-        document.documentElement.style.setProperty('--tg-theme-button-color', tg.buttonColor || '#3390ec');
-        document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.buttonTextColor || '#ffffff');
-        document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', tg.secondaryBackgroundColor || '#f5f5f5');
-        document.documentElement.style.setProperty('--tg-theme-hint-color', tg.hintColor || '#999999');
+        // Анимация появления
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
 
         // Переключение вкладок
         document.querySelectorAll('.tab').forEach(tab => {
@@ -398,34 +818,61 @@
             });
         });
 
-        // AI Toggle
+        // AI Toggle с анимацией
         let aiEnabled = false;
-        document.getElementById('aiToggle').addEventListener('click', function() {
+        const aiToggle = document.getElementById('aiToggle');
+        aiToggle.addEventListener('click', function() {
             aiEnabled = !aiEnabled;
             this.classList.toggle('active');
+            
+            // Haptic feedback
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
         });
 
         // Выбор файла
-        document.getElementById('fileInput').addEventListener('change', function(e) {
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        
+        fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                document.getElementById('fileName').textContent = `📄 ${file.name}`;
+                fileName.style.display = 'block';
+                fileName.textContent = `📄 ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} МБ)`;
+                
+                // Анимация появления
+                fileName.style.animation = 'none';
+                fileName.offsetHeight;
+                fileName.style.animation = 'fadeIn 0.3s ease';
             }
         });
 
         // Обработка
-        document.getElementById('processBtn').addEventListener('click', () => {
+        const processBtn = document.getElementById('processBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const progressStatus = document.getElementById('progressStatus');
+
+        processBtn.addEventListener('click', () => {
             const url = document.getElementById('youtubeUrl').value;
-            const file = document.getElementById('fileInput').files[0];
+            const file = fileInput.files[0];
             
             if (!url && !file) {
                 tg.showAlert('Выберите видео или вставьте ссылку на YouTube');
                 return;
             }
 
+            // Haptic feedback
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+
             // Показываем прогресс
-            document.getElementById('progressContainer').style.display = 'block';
-            document.getElementById('processBtn').disabled = true;
+            progressContainer.style.display = 'block';
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<span>⏳</span> Обработка...';
 
             // Отправляем данные боту
             const data = {
@@ -438,48 +885,87 @@
             
             // Анимация прогресса
             let progress = 0;
+            const stages = [
+                { percent: 20, text: 'Загрузка видео...', status: 'Скачивание с YouTube' },
+                { percent: 40, text: 'Анализ...', status: 'AI анализирует видео' },
+                { percent: 60, text: 'Нарезка...', status: 'Создание частей' },
+                { percent: 80, text: 'Кодирование...', status: 'Оптимизация качества' },
+                { percent: 100, text: 'Готово!', status: 'Отправка в Telegram' }
+            ];
+
+            let currentStage = 0;
             const interval = setInterval(() => {
-                progress += 5;
-                document.getElementById('progressFill').style.width = progress + '%';
-                
-                if (progress < 30) {
-                    document.getElementById('progressText').textContent = 'Загрузка видео...';
-                } else if (progress < 70) {
-                    document.getElementById('progressText').textContent = 'Обработка...';
-                } else {
-                    document.getElementById('progressText').textContent = 'Отправка...';
+                if (currentStage < stages.length) {
+                    const stage = stages[currentStage];
+                    progressFill.style.width = stage.percent + '%';
+                    progressText.textContent = stage.text;
+                    progressStatus.textContent = stage.status;
+                    currentStage++;
                 }
                 
                 if (progress >= 100) {
                     clearInterval(interval);
                 }
-            }, 500);
+                progress += 2;
+            }, 200);
         });
 
         // Загрузка статистики
-        async function loadStats() {
+        function loadStats() {
             // В реальном приложении здесь был бы запрос к боту
-            document.getElementById('statVideos').textContent = localStorage.getItem('statVideos') || '0';
-            document.getElementById('statClips').textContent = localStorage.getItem('statClips') || '0';
-            document.getElementById('statMinutes').textContent = localStorage.getItem('statMinutes') || '0';
-            document.getElementById('statAi').textContent = localStorage.getItem('statAi') || '0';
+            const stats = {
+                videos: localStorage.getItem('statVideos') || '12',
+                clips: localStorage.getItem('statClips') || '36',
+                minutes: localStorage.getItem('statMinutes') || '48',
+                ai: localStorage.getItem('statAi') || '8'
+            };
+            
+            // Анимация чисел
+            animateNumber('statVideos', stats.videos);
+            animateNumber('statClips', stats.clips);
+            animateNumber('statMinutes', stats.minutes);
+            animateNumber('statAi', stats.ai);
         }
 
-        document.getElementById('refreshStats').addEventListener('click', loadStats);
+        function animateNumber(elementId, target) {
+            const element = document.getElementById(elementId);
+            let current = 0;
+            const increment = target / 20;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 50);
+        }
+
+        document.getElementById('refreshStats').addEventListener('click', () => {
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+            loadStats();
+        });
 
         // Очистка
         document.getElementById('cleanBtn').addEventListener('click', () => {
             tg.showConfirm('Удалить все временные файлы?', (confirmed) => {
                 if (confirmed) {
+                    if (tg.HapticFeedback) {
+                        tg.HapticFeedback.notificationOccurred('success');
+                    }
                     tg.sendData(JSON.stringify({ action: 'clean' }));
-                    tg.showAlert('Файлы очищены!');
+                    tg.showAlert('✅ Файлы очищены!');
                 }
             });
         });
 
-        // Получение данных от бота
-        tg.onEvent('mainButtonClicked', () => {
-            console.log('Main button clicked');
+        // Main Button
+        tg.MainButton.setText('НАЧАТЬ ОБРАБОТКУ');
+        tg.MainButton.onClick(() => {
+            processBtn.click();
         });
     </script>
 </body>
