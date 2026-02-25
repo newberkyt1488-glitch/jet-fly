@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>✂️ Video Cutter</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -18,27 +17,25 @@
         :root {
             --bg-primary: #0d0d0d;
             --bg-secondary: #1a1a1a;
-            --bg-card: #242424;
+            --bg-card: #1f1f1f;
             --accent-primary: #00ff88;
             --accent-secondary: #00d4ff;
             --accent-gradient: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
             --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
+            --text-secondary: #888888;
             --danger: #ff4757;
-            --warning: #ffa502;
             --success: #2ed573;
         }
 
         body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* Grid Background */
+        /* Background */
         .grid-bg {
             position: fixed;
             top: 0;
@@ -48,76 +45,71 @@
             background-image: 
                 linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-size: 60px 60px;
             z-index: -2;
         }
 
-        /* Glow Orbs */
         .glow-orb {
             position: fixed;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.5;
+            filter: blur(120px);
+            opacity: 0.4;
             z-index: -1;
             animation: orbFloat 20s ease-in-out infinite;
         }
 
         .glow-orb-1 {
-            width: 400px;
-            height: 400px;
+            width: 500px;
+            height: 500px;
             background: var(--accent-primary);
             top: -200px;
-            right: -100px;
-            animation-delay: 0s;
+            right: -150px;
         }
 
         .glow-orb-2 {
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             background: var(--accent-secondary);
-            bottom: -150px;
-            left: -100px;
+            bottom: -200px;
+            left: -150px;
             animation-delay: -10s;
         }
 
         @keyframes orbFloat {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
+            50% { transform: translate(40px, -40px) scale(1.1); }
         }
 
         .container {
-            max-width: 480px;
+            max-width: 500px;
             margin: 0 auto;
-            padding: 24px;
-            padding-bottom: 120px;
+            padding: 20px;
+            padding-bottom: 100px;
         }
 
         /* Header */
         .header {
             text-align: center;
-            padding: 40px 0 30px;
-            position: relative;
+            padding: 30px 0;
         }
 
         .header-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
+            padding: 6px 14px;
             background: rgba(0, 255, 136, 0.1);
             border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 100px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--accent-primary);
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
         }
 
         .header-badge .dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: var(--accent-primary);
             border-radius: 50%;
             animation: blink 2s ease-in-out infinite;
@@ -125,39 +117,37 @@
 
         @keyframes blink {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            50% { opacity: 0.4; }
         }
 
         .header h1 {
-            font-size: 42px;
+            font-size: 38px;
             font-weight: 900;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             letter-spacing: -1px;
         }
 
         .header p {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--text-secondary);
-            font-weight: 400;
-            line-height: 1.5;
         }
 
-        /* Main Action Card */
-        .main-card {
+        /* Cards */
+        .card {
             background: var(--bg-card);
-            border-radius: 24px;
-            padding: 28px;
-            margin-bottom: 20px;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
             overflow: hidden;
         }
 
-        .main-card::before {
+        .card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -167,56 +157,59 @@
             background: var(--accent-gradient);
         }
 
-        .card-label {
+        .card-title {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-secondary);
             margin-bottom: 16px;
         }
 
-        /* Upload Zone */
-        .upload-zone {
-            position: relative;
-            border: 2px dashed rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .upload-zone:hover {
-            border-color: rgba(0, 255, 136, 0.5);
+        /* Upload Button - FIXED */
+        .upload-btn {
+            width: 100%;
+            padding: 32px 24px;
             background: rgba(0, 255, 136, 0.05);
+            border: 2px dashed rgba(0, 255, 136, 0.3);
+            border-radius: 16px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
-        .upload-zone:active {
+        .upload-btn:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.6);
+        }
+
+        .upload-btn:active {
             transform: scale(0.98);
         }
 
-        .upload-icon {
-            font-size: 56px;
-            margin-bottom: 16px;
-            filter: grayscale(0.5);
+        .upload-btn-icon {
+            font-size: 48px;
+            filter: grayscale(0.3);
             transition: all 0.3s ease;
         }
 
-        .upload-zone:hover .upload-icon {
+        .upload-btn:hover .upload-btn-icon {
             filter: grayscale(0);
             transform: scale(1.1);
         }
 
-        .upload-title {
-            font-size: 17px;
+        .upload-btn-text {
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 8px;
+            color: var(--text-primary);
         }
 
-        .upload-hint {
-            font-size: 14px;
+        .upload-btn-hint {
+            font-size: 13px;
             color: var(--text-secondary);
         }
 
@@ -224,13 +217,16 @@
             display: none;
         }
 
+        /* File Info */
         .file-info {
             display: none;
-            margin-top: 20px;
+            margin-top: 16px;
             padding: 16px;
             background: rgba(0, 255, 136, 0.1);
-            border-radius: 16px;
             border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 14px;
+            align-items: center;
+            gap: 12px;
             animation: slideIn 0.3s ease;
         }
 
@@ -241,46 +237,35 @@
 
         .file-info.show {
             display: flex;
-            align-items: center;
-            gap: 12px;
         }
 
         .file-info-icon {
             font-size: 32px;
         }
 
-        .file-info-text {
-            flex: 1;
-        }
-
         .file-info-name {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             margin-bottom: 4px;
         }
 
         .file-info-size {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
         }
 
         /* URL Input */
-        .url-wrapper {
-            position: relative;
-            margin-top: 20px;
-        }
-
         .url-input {
             width: 100%;
-            padding: 18px 20px;
-            padding-right: 50px;
+            padding: 16px 18px;
             background: var(--bg-secondary);
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 15px;
             color: var(--text-primary);
             font-family: inherit;
             transition: all 0.3s ease;
+            margin-top: 16px;
         }
 
         .url-input:focus {
@@ -293,59 +278,92 @@
             color: var(--text-secondary);
         }
 
-        .url-icon {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 20px;
-            opacity: 0.5;
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
         }
 
-        /* AI Toggle Card */
-        .feature-card {
+        .setting-option {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .setting-option:hover {
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .setting-option.active {
+            border-color: var(--accent-primary);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .setting-option-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .setting-option-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .setting-option-value {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* AI Toggle */
+        .ai-card {
             background: var(--bg-card);
             border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .feature-header {
+        .ai-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
-        .feature-title {
+        .ai-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 17px;
+            gap: 10px;
+            font-size: 16px;
             font-weight: 600;
         }
 
-        .feature-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
+        .ai-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             background: var(--accent-gradient);
         }
 
-        /* Premium Toggle */
         .toggle {
-            width: 60px;
-            height: 34px;
+            width: 54px;
+            height: 30px;
             background: var(--bg-secondary);
             border-radius: 100px;
             position: relative;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -356,62 +374,44 @@
 
         .toggle-knob {
             position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 24px;
-            height: 24px;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
             background: white;
             border-radius: 50%;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
 
         .toggle.active .toggle-knob {
-            transform: translateX(26px);
+            transform: translateX(24px);
         }
 
-        .feature-description {
-            font-size: 14px;
+        .ai-description {
+            font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.5;
-        }
-
-        .feature-tags {
-            display: flex;
-            gap: 8px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            padding: 6px 12px;
-            background: rgba(0, 255, 136, 0.1);
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent-primary);
         }
 
         /* Action Button */
         .action-btn {
             width: 100%;
-            padding: 22px;
+            padding: 20px;
             background: var(--accent-gradient);
             border: none;
-            border-radius: 20px;
-            font-size: 18px;
+            border-radius: 16px;
+            font-size: 17px;
             font-weight: 700;
             color: #000;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
         }
 
         .action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0, 255, 136, 0.4);
+            box-shadow: 0 12px 32px rgba(0, 255, 136, 0.4);
         }
 
         .action-btn:active {
@@ -428,30 +428,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
+            gap: 10px;
         }
 
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.6s;
-        }
-
-        .action-btn:hover::before {
-            left: 100%;
-        }
-
-        /* Progress Section */
+        /* Progress */
         .progress-section {
             display: none;
-            margin-top: 20px;
+            margin-top: 16px;
         }
 
         .progress-section.show {
@@ -459,10 +442,15 @@
             animation: fadeIn 0.3s ease;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .progress-card {
             background: var(--bg-card);
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 16px;
+            padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -470,12 +458,12 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .progress-spinner {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.1);
             border-top-color: var(--accent-primary);
             border-radius: 50%;
@@ -487,23 +475,23 @@
         }
 
         .progress-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             flex: 1;
         }
 
-        .progress-percentage {
+        .progress-percent {
             font-size: 14px;
             font-weight: 700;
             color: var(--accent-primary);
         }
 
-        .progress-bar-wrapper {
-            height: 8px;
+        .progress-bar-bg {
+            height: 6px;
             background: var(--bg-secondary);
             border-radius: 100px;
             overflow: hidden;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .progress-bar-fill {
@@ -511,23 +499,7 @@
             background: var(--accent-gradient);
             border-radius: 100px;
             width: 0%;
-            transition: width 0.5s ease;
-            position: relative;
-        }
-
-        .progress-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            to { transform: translateX(100%); }
+            transition: width 0.4s ease;
         }
 
         .progress-steps {
@@ -553,8 +525,8 @@
         }
 
         .step-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: var(--text-secondary);
             transition: all 0.3s ease;
@@ -562,7 +534,7 @@
 
         .progress-step.active .step-dot {
             background: var(--accent-primary);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
         }
 
         .progress-step.completed .step-dot {
@@ -570,57 +542,33 @@
         }
 
         .step-label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
             text-align: center;
         }
 
-        /* Stats Cards */
+        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 20px;
         }
 
         .stat-card {
             background: var(--bg-card);
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 16px;
+            padding: 20px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--accent-gradient);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .stat-card:hover::before {
-            transform: scaleX(1);
         }
 
         .stat-icon {
-            font-size: 28px;
-            margin-bottom: 12px;
+            font-size: 26px;
+            margin-bottom: 10px;
         }
 
         .stat-value {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 900;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
@@ -631,7 +579,7 @@
         }
 
         .stat-label {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
             font-weight: 500;
         }
@@ -644,28 +592,27 @@
             right: 0;
             background: var(--bg-secondary);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 12px 24px;
-            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            padding: 10px 20px;
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
             z-index: 100;
         }
 
         .tabs {
             display: flex;
-            gap: 8px;
-            max-width: 480px;
+            gap: 6px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 14px;
+            padding: 12px;
             background: transparent;
             border: none;
-            border-radius: 14px;
-            font-size: 20px;
+            border-radius: 12px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -673,7 +620,7 @@
         }
 
         .tab-btn span {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--text-secondary);
         }
@@ -686,11 +633,7 @@
             color: var(--accent-primary);
         }
 
-        .tab-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Tab Content */
+        /* Tab Panels */
         .tab-panel {
             display: none;
         }
@@ -700,15 +643,10 @@
             animation: fadeIn 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         /* Settings List */
         .settings-list {
             background: var(--bg-card);
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -717,69 +655,48 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 24px;
+            padding: 18px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.3s ease;
         }
 
         .setting-item:last-child {
             border-bottom: none;
         }
 
-        .setting-item:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
         .setting-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
         .setting-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
         }
 
-        .setting-icon.purple {
-            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
-        }
-
-        .setting-icon.blue {
-            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-        }
-
-        .setting-icon.green {
-            background: linear-gradient(135deg, #22c55e 0%, #00ff88 100%);
-        }
-
-        .setting-icon.red {
-            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
-        }
-
-        .setting-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .setting-icon.purple { background: linear-gradient(135deg, #a855f7, #6366f1); }
+        .setting-icon.blue { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+        .setting-icon.green { background: linear-gradient(135deg, #22c55e, #00ff88); }
+        .setting-icon.red { background: linear-gradient(135deg, #ef4444, #f97316); }
 
         .setting-name {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
+            margin-bottom: 3px;
         }
 
         .setting-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
         }
 
         .setting-value {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--accent-primary);
         }
@@ -787,20 +704,20 @@
         /* Delete Button */
         .delete-btn {
             width: 100%;
-            padding: 18px;
+            padding: 16px;
             background: rgba(255, 71, 87, 0.1);
             border: 2px solid rgba(255, 71, 87, 0.3);
-            border-radius: 16px;
-            font-size: 16px;
+            border-radius: 14px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--danger);
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 20px;
+            margin-top: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .delete-btn:hover {
@@ -808,61 +725,19 @@
             border-color: var(--danger);
         }
 
-        .delete-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Success State */
-        .success-state {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 24px;
-            background: var(--success);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            animation: successPop 0.5s ease;
-        }
-
-        @keyframes successPop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .success-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .success-text {
-            color: var(--text-secondary);
-            font-size: 15px;
-        }
-
         /* Responsive */
         @media (max-width: 400px) {
-            .header h1 { font-size: 36px; }
+            .header h1 { font-size: 32px; }
             .stat-value { font-size: 28px; }
             .container { padding: 16px; }
         }
     </style>
 </head>
 <body>
-    <!-- Background Effects -->
     <div class="grid-bg"></div>
     <div class="glow-orb glow-orb-1"></div>
     <div class="glow-orb glow-orb-2"></div>
 
-    <!-- Main Content -->
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -871,55 +746,84 @@
                 <span>AI POWERED</span>
             </div>
             <h1>Video Cutter</h1>
-            <p>Профессиональная нарезка видео для TikTok с искусственным интеллектом</p>
+            <p>Нарезка видео для TikTok с AI</p>
         </div>
 
         <!-- Upload Tab -->
         <div class="tab-panel active" id="tab-upload">
-            <!-- Main Upload Card -->
-            <div class="main-card">
-                <div class="card-label">📁 ИСТОЧНИК</div>
+            <!-- Upload Card -->
+            <div class="card">
+                <div class="card-title">📁 ВЫБЕРИТЕ ВИДЕО</div>
                 
-                <label class="upload-zone" for="fileInput">
-                    <div class="upload-icon">🎬</div>
-                    <div class="upload-title">Загрузить видео</div>
-                    <div class="upload-hint">MP4, MOV, AVI до 300 МБ</div>
+                <label class="upload-btn" for="fileInput">
+                    <div class="upload-btn-icon">📤</div>
+                    <div class="upload-btn-text">Нажмите для загрузки</div>
+                    <div class="upload-btn-hint">MP4, MOV, AVI до 300 МБ</div>
                 </label>
                 <input type="file" id="fileInput" class="file-input" accept="video/*">
                 
                 <div class="file-info" id="fileInfo">
                     <div class="file-info-icon">📄</div>
-                    <div class="file-info-text">
+                    <div>
                         <div class="file-info-name" id="fileName">video.mp4</div>
                         <div class="file-info-size" id="fileSize">24.5 МБ</div>
                     </div>
-                    <div style="font-size: 20px;">✅</div>
                 </div>
 
-                <div class="url-wrapper">
-                    <input type="text" class="url-input" id="youtubeUrl" placeholder="YouTube ссылка...">
-                    <span class="url-icon">🔗</span>
+                <input type="text" class="url-input" id="youtubeUrl" placeholder="🔗 YouTube ссылка...">
+            </div>
+
+            <!-- Settings Card -->
+            <div class="card">
+                <div class="card-title">⚙️ НАСТРОЙКИ НАРЕЗКИ</div>
+                
+                <div class="settings-grid">
+                    <div class="setting-option active" data-setting="quality" data-value="1080p">
+                        <div class="setting-option-icon">📐</div>
+                        <div class="setting-option-label">1080p</div>
+                        <div class="setting-option-value">Full HD</div>
+                    </div>
+                    <div class="setting-option" data-setting="quality" data-value="720p">
+                        <div class="setting-option-icon">📐</div>
+                        <div class="setting-option-label">720p</div>
+                        <div class="setting-option-value">HD</div>
+                    </div>
+                    <div class="setting-option active" data-setting="duration" data-value="120">
+                        <div class="setting-option-icon">⏱️</div>
+                        <div class="setting-option-label">2 мин</div>
+                        <div class="setting-option-value">120 сек</div>
+                    </div>
+                    <div class="setting-option" data-setting="duration" data-value="60">
+                        <div class="setting-option-icon">⏱️</div>
+                        <div class="setting-option-label">1 мин</div>
+                        <div class="setting-option-value">60 сек</div>
+                    </div>
+                    <div class="setting-option active" data-setting="format" data-value="9:16">
+                        <div class="setting-option-icon">📱</div>
+                        <div class="setting-option-label">9:16</div>
+                        <div class="setting-option-value">TikTok</div>
+                    </div>
+                    <div class="setting-option" data-setting="format" data-value="1:1">
+                        <div class="setting-option-icon">📱</div>
+                        <div class="setting-option-label">1:1</div>
+                        <div class="setting-option-value">Post</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- AI Feature Card -->
-            <div class="feature-card">
-                <div class="feature-header">
-                    <div class="feature-title">
-                        <div class="feature-icon">🤖</div>
+            <!-- AI Card -->
+            <div class="ai-card">
+                <div class="ai-header">
+                    <div class="ai-title">
+                        <div class="ai-icon">🤖</div>
                         AI-нарезка
                     </div>
                     <div class="toggle" id="aiToggle">
                         <div class="toggle-knob"></div>
                     </div>
                 </div>
-                <div class="feature-description">
-                    Искусственный интеллект автоматически определит самые интересные моменты в вашем видео
-                </div>
-                <div class="feature-tags">
-                    <span class="tag">🎯 Умный анализ</span>
-                    <span class="tag">📊 Без потерь</span>
-                    <span class="tag">⚡ Быстро</span>
+                <div class="ai-description">
+                    AI автоматически найдёт самые интересные моменты в видео
                 </div>
             </div>
 
@@ -931,15 +835,15 @@
                 </div>
             </button>
 
-            <!-- Progress Section -->
+            <!-- Progress -->
             <div class="progress-section" id="progressSection">
                 <div class="progress-card">
                     <div class="progress-header">
                         <div class="progress-spinner"></div>
                         <div class="progress-title">Обработка видео</div>
-                        <div class="progress-percentage" id="progressPercent">0%</div>
+                        <div class="progress-percent" id="progressPercent">0%</div>
                     </div>
-                    <div class="progress-bar-wrapper">
+                    <div class="progress-bar-bg">
                         <div class="progress-bar-fill" id="progressBar"></div>
                     </div>
                     <div class="progress-steps">
@@ -988,11 +892,6 @@
                     <div class="stat-label">AI нарезок</div>
                 </div>
             </div>
-            
-            <button class="action-btn" id="refreshStats" style="background: var(--bg-secondary); box-shadow: none; border: 2px solid rgba(255,255,255,0.1);">
-                <span>🔄</span>
-                <span>Обновить статистику</span>
-            </button>
         </div>
 
         <!-- Settings Tab -->
@@ -1001,42 +900,39 @@
                 <div class="setting-item">
                     <div class="setting-left">
                         <div class="setting-icon purple">📐</div>
-                        <div class="setting-info">
+                        <div>
                             <div class="setting-name">Разрешение</div>
-                            <div class="setting-desc">Качество выходного видео</div>
+                            <div class="setting-desc">Качество видео</div>
                         </div>
                     </div>
-                    <div class="setting-value">1080p</div>
+                    <div class="setting-value" id="settingQuality">1080p</div>
                 </div>
-                
                 <div class="setting-item">
                     <div class="setting-left">
                         <div class="setting-icon blue">⏱️</div>
-                        <div class="setting-info">
+                        <div>
                             <div class="setting-name">Длительность</div>
-                            <div class="setting-desc">Длина каждого фрагмента</div>
+                            <div class="setting-desc">Длина части</div>
                         </div>
                     </div>
-                    <div class="setting-value">2 мин</div>
+                    <div class="setting-value" id="settingDuration">2 мин</div>
                 </div>
-                
                 <div class="setting-item">
                     <div class="setting-left">
                         <div class="setting-icon green">📱</div>
-                        <div class="setting-info">
+                        <div>
                             <div class="setting-name">Формат</div>
-                            <div class="setting-desc">Соотношение сторон</div>
+                            <div class="setting-desc">Соотношение</div>
                         </div>
                     </div>
-                    <div class="setting-value">9:16</div>
+                    <div class="setting-value" id="settingFormat">9:16</div>
                 </div>
-                
                 <div class="setting-item">
                     <div class="setting-left">
                         <div class="setting-icon red">🔊</div>
-                        <div class="setting-info">
+                        <div>
                             <div class="setting-name">Аудио</div>
-                            <div class="setting-desc">Звуковая дорожка</div>
+                            <div class="setting-desc">Кодек</div>
                         </div>
                     </div>
                     <div class="setting-value">AAC</div>
@@ -1045,7 +941,7 @@
 
             <button class="delete-btn" id="cleanBtn">
                 <span>🗑️</span>
-                <span>Очистить все файлы</span>
+                <span>Очистить файлы</span>
             </button>
         </div>
     </div>
@@ -1073,6 +969,14 @@
         tg.ready();
         tg.expand();
 
+        // Current settings
+        let currentSettings = {
+            quality: '1080p',
+            duration: '120',
+            format: '9:16',
+            ai: false
+        };
+
         // Tab switching
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1082,27 +986,47 @@
                 btn.classList.add('active');
                 document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
                 
-                if (btn.dataset.tab === 'stats') {
-                    loadStats();
+                if (btn.dataset.tab === 'stats') loadStats();
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            });
+        });
+
+        // Settings options
+        document.querySelectorAll('.setting-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const setting = option.dataset.setting;
+                const value = option.dataset.value;
+                
+                // Update current settings
+                currentSettings[setting] = value;
+                
+                // Update UI
+                document.querySelectorAll(`[data-setting="${setting}"]`).forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                option.classList.add('active');
+                
+                // Update settings tab
+                const displayValues = {
+                    quality: value,
+                    duration: value === '120' ? '2 мин' : '1 мин',
+                    format: value
+                };
+                const settingDisplay = document.getElementById('setting' + setting.charAt(0).toUpperCase() + setting.slice(1));
+                if (settingDisplay) {
+                    settingDisplay.textContent = displayValues[setting] || value;
                 }
                 
-                // Haptic feedback
-                if (tg.HapticFeedback) {
-                    tg.HapticFeedback.impactOccurred('light');
-                }
+                if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
             });
         });
 
         // AI Toggle
-        let aiEnabled = false;
         const aiToggle = document.getElementById('aiToggle');
         aiToggle.addEventListener('click', function() {
-            aiEnabled = !aiEnabled;
+            currentSettings.ai = !currentSettings.ai;
             this.classList.toggle('active');
-            
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         });
 
         // File upload
@@ -1117,10 +1041,7 @@
                 fileName.textContent = file.name;
                 fileSize.textContent = (file.size / 1024 / 1024).toFixed(1) + ' МБ';
                 fileInfo.classList.add('show');
-                
-                if (tg.HapticFeedback) {
-                    tg.HapticFeedback.selectionChanged();
-                }
+                if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
             }
         });
 
@@ -1139,19 +1060,20 @@
                 return;
             }
 
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.notificationOccurred('success');
-            }
+            if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
             progressSection.classList.add('show');
             processBtn.disabled = true;
             processBtn.innerHTML = '<div class="action-btn-content"><span>⏳</span><span>Обработка...</span></div>';
 
-            // Send to bot
+            // Send to bot with settings
             tg.sendData(JSON.stringify({
                 action: 'process',
                 url: url,
-                ai: aiEnabled
+                ai: currentSettings.ai,
+                quality: currentSettings.quality,
+                duration: currentSettings.duration,
+                format: currentSettings.format
             }));
 
             // Animate progress
@@ -1213,20 +1135,11 @@
             }, 50);
         }
 
-        document.getElementById('refreshStats').addEventListener('click', () => {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-            loadStats();
-        });
-
         // Clean button
         document.getElementById('cleanBtn').addEventListener('click', () => {
             tg.showConfirm('Удалить все временные файлы?', (confirmed) => {
                 if (confirmed) {
-                    if (tg.HapticFeedback) {
-                        tg.HapticFeedback.notificationOccurred('success');
-                    }
+                    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
                     tg.sendData(JSON.stringify({ action: 'clean' }));
                     tg.showAlert('✅ Файлы очищены!');
                 }
