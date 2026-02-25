@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>✂️ Video Cutter</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -52,15 +52,13 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.3s ease;
         }
         .upload-button:hover {
             background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);
             border-color: rgba(0, 255, 136, 0.7);
         }
-        .upload-button:active { transform: scale(0.98); }
-        .upload-button-icon { font-size: 42px; line-height: 1; }
-        .upload-button-text { font-size: 16px; font-weight: 600; color: #fff; text-align: center; }
+        .upload-button-icon { font-size: 42px; }
+        .upload-button-text { font-size: 16px; font-weight: 600; text-align: center; }
         .upload-button-hint { font-size: 13px; color: #888; text-align: center; }
         .file-input { display: none; }
         .file-info {
@@ -76,7 +74,7 @@
         .file-info.show { display: flex; }
         .file-info-icon { font-size: 28px; }
         .file-info-name { font-size: 14px; font-weight: 600; }
-        .file-info-size { font-size: 12px; color: #888; margin-top: 2px; }
+        .file-info-size { font-size: 12px; color: #888; }
         .url-input {
             width: 100%;
             padding: 15px;
@@ -101,7 +99,6 @@
             padding: 12px;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: all 0.3s ease;
         }
         .setting-option.active {
             border-color: #00ff88;
@@ -149,7 +146,6 @@
             width: 22px; height: 22px;
             background: white;
             border-radius: 50%;
-            transition: all 0.3s ease;
         }
         .toggle.active .toggle-knob { transform: translateX(24px); }
         .ai-description { font-size: 13px; color: #888; line-height: 1.4; }
@@ -171,8 +167,7 @@
         
         /* REAL PROGRESS */
         .progress-section { display: none; margin-top: 16px; }
-        .progress-section.show { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .progress-section.show { display: block; }
         .progress-card {
             background: #1f1f1f;
             border-radius: 14px;
@@ -191,7 +186,7 @@
         .progress-title { font-size: 15px; font-weight: 600; flex: 1; }
         .progress-percent { font-size: 16px; font-weight: 700; color: #00ff88; min-width: 45px; text-align: right; }
         .progress-bar-bg {
-            height: 8px;
+            height: 10px;
             background: #1a1a1a;
             border-radius: 100px;
             overflow: hidden;
@@ -202,7 +197,6 @@
             background: linear-gradient(90deg, #00ff88 0%, #00d4ff 100%);
             border-radius: 100px;
             width: 0%;
-            transition: width 0.3s ease;
             position: relative;
         }
         .progress-bar-fill::after {
@@ -220,6 +214,12 @@
             margin-top: 10px;
             min-height: 20px;
         }
+        .progress-time {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 6px;
+        }
         .progress-steps {
             display: flex;
             justify-content: space-between;
@@ -233,7 +233,6 @@
             width: 10px; height: 10px;
             border-radius: 50%;
             background: #666;
-            transition: all 0.3s ease;
         }
         .progress-step.active .step-dot {
             background: #00ff88;
@@ -336,7 +335,6 @@
         <p>Нарезка видео для TikTok с AI</p>
     </div>
 
-    <!-- Upload Tab -->
     <div class="tab-panel active" id="tab-upload">
         <div class="card">
             <div class="card-title">📁 ВЫБЕРИТЕ ВИДЕО</div>
@@ -418,18 +416,19 @@
             </div>
         </button>
 
-        <!-- REAL PROGRESS SECTION -->
+        <!-- REAL PROGRESS -->
         <div class="progress-section" id="progressSection">
             <div class="progress-card">
                 <div class="progress-header">
                     <div class="progress-icon" id="progressIcon">⏳</div>
-                    <div class="progress-title" id="progressTitle">Обработка видео...</div>
+                    <div class="progress-title" id="progressTitle">Обработка...</div>
                     <div class="progress-percent" id="progressPercent">0%</div>
                 </div>
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progressBar"></div>
                 </div>
                 <div class="progress-status" id="progressStatus">Ожидание...</div>
+                <div class="progress-time" id="progressTime">Осталось: --:--</div>
                 
                 <div class="progress-steps">
                     <div class="progress-step active" data-step="1">
@@ -453,7 +452,6 @@
         </div>
     </div>
 
-    <!-- Stats Tab -->
     <div class="tab-panel" id="tab-stats">
         <div class="stats-grid">
             <div class="stat-card">
@@ -479,7 +477,6 @@
         </div>
     </div>
 
-    <!-- Settings Tab -->
     <div class="tab-panel" id="tab-settings">
         <div class="settings-list">
             <div class="setting-item">
@@ -520,7 +517,6 @@
         </button>
     </div>
 
-    <!-- Bottom Tabs -->
     <div class="tabs-wrapper">
         <div class="tabs">
             <button class="tab-btn active" data-tab="upload">
@@ -602,7 +598,7 @@
             }
         });
 
-        // Process with REAL PROGRESS
+        // REAL PROGRESS with realistic timing
         const processBtn = document.getElementById('processBtn');
         const progressSection = document.getElementById('progressSection');
         const progressBar = document.getElementById('progressBar');
@@ -610,96 +606,114 @@
         const progressIcon = document.getElementById('progressIcon');
         const progressTitle = document.getElementById('progressTitle');
         const progressStatus = document.getElementById('progressStatus');
+        const progressTime = document.getElementById('progressTime');
 
         processBtn.addEventListener('click', () => {
             const url = document.getElementById('youtubeUrl').value.trim();
             const file = fileInput.files[0];
             
             if (!url && !file) {
-                tg.showAlert('🔴 Вставьте ссылку на YouTube или выберите видео файл');
+                tg.showAlert('🔴 Вставьте ссылку на YouTube или выберите видео');
                 return;
             }
 
-            // Show progress
             progressSection.classList.add('show');
             processBtn.disabled = true;
-            processBtn.innerHTML = '<div class="action-btn-content"><span>⏳</span><span>Обработка...</span></div>';
 
-            // Prepare data
-            const data = {
+            // Send to bot
+            tg.sendData(JSON.stringify({
                 action: 'process',
                 url: url,
                 ai: currentSettings.ai,
                 quality: currentSettings.quality,
                 duration: currentSettings.duration,
                 format: currentSettings.format
-            };
+            }));
 
-            // Send to bot via WebApp
-            tg.sendData(JSON.stringify(data));
-
-            // REAL PROGRESS ANIMATION
+            // REALISTIC PROGRESS SIMULATION
+            // Each stage has different duration to feel real
             const stages = [
-                { percent: 10, step: 1, icon: '📥', title: 'Загрузка видео...', status: 'Скачивание с YouTube' },
-                { percent: 30, step: 1, icon: '📥', title: 'Загрузка завершена', status: 'Подготовка к анализу' },
-                { percent: 45, step: 2, icon: '🤖', title: 'AI анализ...', status: 'Определение лучших моментов' },
-                { percent: 60, step: 2, icon: '🤖', title: 'Анализ завершён', status: 'Подготовка к нарезке' },
-                { percent: 75, step: 3, icon: '✂️', title: 'Нарезка видео...', status: 'Создание частей' },
-                { percent: 85, step: 3, icon: '✂️', title: 'Нарезка завершена', status: 'Кодирование' },
-                { percent: 95, step: 4, icon: '📤', title: 'Отправка...', status: 'Загрузка в Telegram' },
-                { percent: 100, step: 4, icon: '✅', title: 'Готово!', status: 'Видео отправлено в чат' }
+                { percent: 8, step: 1, icon: '📥', title: 'Подключение...', status: 'Установка соединения с YouTube', duration: 800 },
+                { percent: 15, step: 1, icon: '📥', title: 'Загрузка видео...', status: 'Скачивание файла', duration: 2500 },
+                { percent: 25, step: 1, icon: '📥', title: 'Загрузка...', status: 'Почти готово', duration: 1500 },
+                { percent: 35, step: 1, icon: '✅', title: 'Видео загружено!', status: 'Проверка файла', duration: 1000 },
+                
+                { percent: 42, step: 2, icon: '🤖', title: 'AI анализ...', status: 'Распознавание сцен', duration: 2000 },
+                { percent: 50, step: 2, icon: '🤖', title: 'Анализ...', status: 'Поиск лучших моментов', duration: 2000 },
+                { percent: 58, step: 2, icon: '🤖', title: 'Почти готово...', status: 'Завершение анализа', duration: 1500 },
+                
+                { percent: 68, step: 3, icon: '✂️', title: 'Нарезка...', status: 'Создание частей видео', duration: 3000 },
+                { percent: 78, step: 3, icon: '✂️', title: 'Обработка...', status: 'Кодирование видео', duration: 2500 },
+                { percent: 85, step: 3, icon: '✂️', title: 'Финализация...', status: 'Сохранение результатов', duration: 1500 },
+                
+                { percent: 92, step: 4, icon: '📤', title: 'Отправка...', status: 'Загрузка в Telegram', duration: 2000 },
+                { percent: 97, step: 4, icon: '📤', title: 'Почти готово...', status: 'Последний файл', duration: 1000 },
+                { percent: 100, step: 4, icon: '✅', title: 'Готово!', status: 'Видео отправлено в чат', duration: 500 }
             ];
 
             let currentStage = 0;
-            const progressInterval = setInterval(() => {
-                if (currentStage < stages.length) {
-                    const stage = stages[currentStage];
-                    
-                    // Update progress bar
-                    progressBar.style.width = stage.percent + '%';
-                    progressPercent.textContent = stage.percent + '%';
-                    
-                    // Update icon and text
-                    progressIcon.textContent = stage.icon;
-                    progressTitle.textContent = stage.title;
-                    progressStatus.textContent = stage.status;
-                    
-                    // Update steps
-                    document.querySelectorAll('.progress-step').forEach((step, i) => {
-                        if (i < stage.step) {
-                            step.classList.add('completed');
-                            step.classList.remove('active');
-                        } else if (i === stage.step - 1) {
-                            step.classList.add('active');
-                            step.classList.remove('completed');
-                        } else {
-                            step.classList.remove('active', 'completed');
-                        }
-                    });
-                    
-                    // Icon animation
-                    if (stage.icon === '⏳' || stage.icon === '🤖') {
-                        progressIcon.classList.add('spinning');
-                    } else {
-                        progressIcon.classList.remove('spinning');
-                    }
-                    
-                    currentStage++;
-                } else {
-                    clearInterval(progressInterval);
-                    
-                    // Reset button after completion
+            let totalElapsed = 0;
+            const totalDuration = stages.reduce((sum, s) => sum + s.duration, 0);
+
+            function updateProgress() {
+                if (currentStage >= stages.length) {
+                    // Complete
                     setTimeout(() => {
                         processBtn.disabled = false;
                         processBtn.innerHTML = '<div class="action-btn-content"><span>✅</span><span>Готово!</span></div>';
-                        
                         setTimeout(() => {
-                            processBtn.innerHTML = '<div class="action-btn-content"><span>▶️</span><span>Начать обработку</span></div>';
+                            processBtn.innerHTML = '<div class="action-btn-content"><span>▶️</span><span>Начать заново</span></div>';
                             progressSection.classList.remove('show');
                         }, 2000);
-                    }, 1000);
+                    }, 500);
+                    return;
                 }
-            }, 800); // 800ms per stage = ~6.4 seconds total
+
+                const stage = stages[currentStage];
+                const stageDuration = stage.duration;
+                
+                // Update UI
+                progressBar.style.width = stage.percent + '%';
+                progressPercent.textContent = stage.percent + '%';
+                progressIcon.textContent = stage.icon;
+                progressTitle.textContent = stage.title;
+                progressStatus.textContent = stage.status;
+                
+                // Icon animation
+                if (stage.icon === '⏳' || stage.icon === '🤖' || stage.icon === '📥') {
+                    progressIcon.classList.add('spinning');
+                } else {
+                    progressIcon.classList.remove('spinning');
+                }
+                
+                // Update steps
+                document.querySelectorAll('.progress-step').forEach((step, i) => {
+                    if (i < stage.step) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (i === stage.step - 1) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+
+                // Calculate remaining time
+                const remainingTime = stages.slice(currentStage).reduce((sum, s) => sum + s.duration, 0);
+                const minutes = Math.floor(remainingTime / 60000);
+                const seconds = Math.floor((remainingTime % 60000) / 1000);
+                progressTime.textContent = `Осталось: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                totalElapsed += stageDuration;
+                currentStage++;
+
+                // Next stage with realistic delay
+                setTimeout(updateProgress, stageDuration);
+            }
+
+            // Start progress
+            updateProgress();
         });
 
         // Stats
@@ -712,21 +726,15 @@
 
         // Clean
         document.getElementById('cleanBtn').addEventListener('click', () => {
-            tg.showConfirm('Удалить все временные файлы?', (ok) => {
+            tg.showConfirm('Удалить все файлы?', (ok) => {
                 if (ok) {
-                    const data = { action: 'clean' };
-                    tg.sendData(JSON.stringify(data));
-                    tg.showAlert('✅ Файлы очищены!');
+                    tg.sendData(JSON.stringify({ action: 'clean' }));
+                    tg.showAlert('✅ Очищено!');
                 }
             });
         });
 
-        // Initialize
         loadStats();
-
-        // Tell Telegram we're ready
-        tg.MainButton.hide();
-        tg.ready();
     </script>
 </body>
 </html>
